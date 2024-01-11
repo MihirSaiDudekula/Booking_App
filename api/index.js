@@ -10,14 +10,14 @@ require('dotenv').config()
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtsecret = process.env.JWT_SECRET
-
+const cookieParser = require('cookie-parser')
 app.use(cors({
   credentials:true,
-  origin: ['http://localhost:5173', 'http://localhost:3000']
+  origin: ['http://localhost:5173','http://localhost:5174', 'http://localhost:3000']
 }))
 
 app.use(express.json());
-
+app.use(cookieParser());
 mongoose.connect(process.env.MONGO_URL);
 
 app.get('/', (req, res) => {
@@ -37,54 +37,15 @@ app.post('/register', async (req, res) => {
       email,
       password:bcrypt.hashSync(password,bcryptSalt)
     })
+    res.json(userDoc)
   }
   catch(e)
   {
     res.status(422).json(e);
   }
 
-  res.json(userDoc)
-})
-
-// app.post('/login', async (req, res) => {
-//   const {email,password} = req.body;
-//   try
-//   {
-//     const userDoc = await User.findOne({email})
-//     if(userDoc)
-//     {
-//       const passOk = bcrypt.compareSync(password,userDoc.password)
-//       if(passOk)
-//       {
-//         jwt.sign(
-//           {
-//             email:userDoc.email,
-//             id:userDoc._id
-//           },jwtsecret,{},
-//           (err,token)=>{
-//             if(error) throw error;
-//             res.cookie('token',token).json('pass ok')
-//             console.log('logged in')
-//           })
-//         res.json('logged in')        
-//       }
-//       else
-//       {
-//         res.status(422).json('pass not correct')
-//       }
-//     }
-//     else
-//     {
-//       res.status(422).json('user does not exist');
-//     }
-//   }
-//   catch(e)
-//   {
-//     res.status(422).json(e);
-//   }
-
   
-// })
+})
 
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -104,7 +65,7 @@ app.post('/login', async (req, res) => {
               console.error(err);
               res.status(500).json('Internal Server Error');
             } else {
-              res.cookie('token', token, { httpOnly: true }).json('Logged in successfully');
+              res.cookie('token', token, { httpOnly: true }).json(userDoc);
             }
           }
         );
@@ -117,6 +78,12 @@ app.post('/login', async (req, res) => {
   } catch (e) {
     res.status(500).json('Internal Server Error');
   }
+});
+
+app.get('/profile', (req, res) => {
+  const { token } = req.cookies;
+  res.json({ token });
+  console.log({token})
 });
 
 
