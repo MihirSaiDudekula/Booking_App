@@ -7,22 +7,23 @@ export default function RegisterPage() {
   const [username,setUsername] = useState('');
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
-  function registerUser(e) {
+  async function registerUser(e) {
     e.preventDefault();
-
-    axios.post('/register',{
-      username,
-      email,
-      password
-    })
-      .then(response => {
-        console.log('Successful request');
-        // Do something with the response if needed
+    try
+    {
+      await axios.post('/register',{
+        username,
+        email,
+        password
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-        // Handle the error if the request fails
-      });
+      alert('Registration Done succesfully')
+    }
+    catch(e)
+    {
+      alert('Registration Failed. Please refresh the page and try again')
+    }
+
+
   }
 
   return (
