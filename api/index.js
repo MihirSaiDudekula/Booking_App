@@ -73,7 +73,7 @@ app.post('/login', async (req, res) => {
         jwt.sign(
           {
             email: userDoc.email, 
-            id: userDoc._id, 
+            id: userDoc._id 
             // Include user's email and user's ID in the token payload
           },
           jwtsecret, // Use the JWT secret for signing the token
@@ -103,15 +103,32 @@ app.post('/login', async (req, res) => {
 
 
 // Define a route to retrieve and log the token from cookies
+// Define a route for handling requests to the '/profile' endpoint
 app.get('/profile', (req, res) => {
   // Extract the 'token' from the cookies in the incoming request
   const { token } = req.cookies;
 
-  // Send a JSON response containing the extracted token
-  res.json({ token });
+  // Check if a token exists
+  if (token) {
+    // Verify the token using jwt.verify
+    jwt.verify(token, jwtsecret, {}, async (err, userData) => {
+      // Handle errors during token verification
+      if (err) throw err;
 
-  // Log the extracted token to the console for debugging purposes
-  console.log({ token });
+      // Destructure relevant information (email, username, _id) from the user data obtained from the token
+      const { email, username, _id } = await User.findById(userData.id);
+
+      // Send a JSON response containing the user information
+      res.json({
+        email,
+        username,
+        _id
+      });
+    });
+  } else {
+    // If no token exists, send a JSON response with null
+    res.json(null);
+  }
 });
 
 

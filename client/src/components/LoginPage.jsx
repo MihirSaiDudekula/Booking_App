@@ -32,7 +32,7 @@ export default function LoginPage() {
       });
 
       // Set the user data in the context using the setUser function
-      await setUser(data);
+      setUser(data);
       alert('Login successful'); // Display a success alert
       setRedirect(true); // Set the redirect state to true
     } catch (e) {

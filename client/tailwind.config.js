@@ -8,6 +8,7 @@ export default {
     extend: {
       colors:{
         primary : '',
+        customPink:'#F5385D'
       },
     },
   },
