@@ -12,7 +12,8 @@ export default function Layout() {
       {/* Render the Header component */}
       <Header />
       {/* Flex container that grows to fill available space with padding, centered content */}
-      <div className="flex-grow p-4 flex justify-center items-center">
+      {/*<div className="flex-grow p-4 flex justify-center items-center">*/}
+      <div className="flex-grow p-3 flex">
         {/* Render the child components defined by the routes using Outlet */}
         <Outlet />
       </div>

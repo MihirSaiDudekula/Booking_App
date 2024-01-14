@@ -9,6 +9,7 @@ export const UserContext = createContext({});
 export function UserContextProvider({ children }) {
   // State to hold user information, initialized as null
   const [user, setUser] = useState(null);
+  const [ready,setReady] = useState(false);
 
   // Use useEffect to fetch user data when the component mounts or when user changes
   useEffect(() => {
@@ -26,6 +27,7 @@ export function UserContextProvider({ children }) {
           
           // Set user data in the component's state
           setUser(userData);
+          setReady(true)
         }
       } catch (error) {
         // Log any errors that occur during the data fetching process
@@ -39,7 +41,7 @@ export function UserContextProvider({ children }) {
 
   // Provide the user data and setUser function to its children components through the context
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, ready }}>
       {children} {/* Render children components */}
     </UserContext.Provider>
   );
@@ -49,3 +51,6 @@ export function UserContextProvider({ children }) {
 export function useUser() {
   return useContext(UserContext);
 }
+// export function checkReady(){
+//   return 
+// }

@@ -48,33 +48,35 @@ export default function LoginPage() {
 
   // Render the login form and UI
   return (
-    <div className="flex flex-col items-center justify-center h-full">
-      <header className="text-4xl mb-4">Login</header>
-      {/* Create a form with input fields, a button, and a link to the registration page */}
-      <form className="max-w-md w-full mx-auto space-y-4" onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full border p-2 rounded-md"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)} // Update email state on input change
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full border p-2 rounded-md"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)} // Update password state on input change
-        />
-        <button className="w-full py-2 rounded-md bg-primary text-white">Login</button>
-        {/* Display a link to the registration page */}
-        <div className="text-center py-2 text-gray-500">
-          Don't have an account yet?
-          <Link to="/register" className="px-1 underline text-black">
-            Register
-          </Link>
-        </div>
-      </form>
+    <div className="flex-grow p-4 flex justify-center place-items-center items-center">
+      <div className="flex flex-col items-center justify-center h-full">
+        <header className="text-4xl mb-4">Login</header>
+        {/* Create a form with input fields, a button, and a link to the registration page */}
+        <form className="max-w-md w-full mx-auto space-y-4" onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full border p-2 rounded-md"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)} // Update email state on input change
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full border p-2 rounded-md"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)} // Update password state on input change
+          />
+          <button className="w-full py-2 rounded-md bg-primary text-white">Login</button>
+          {/* Display a link to the registration page */}
+          <div className="text-center py-2 text-gray-500">
+            Don't have an account yet?
+            <Link to="/register" className="px-1 underline text-black">
+              Register
+            </Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
