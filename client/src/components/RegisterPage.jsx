@@ -32,7 +32,7 @@ export default function RegisterPage() {
 
   // Render the registration form and UI
   return (
-    <div className="flex flex-col items-center justify-center h-full">
+    <div className="flex flex-grow p-3 flex-col items-center justify-center h-full">
       <header className="text-4xl mb-4">Register</header>
       {/* Create a form with input fields, a button, and a link to the login page */}
       <form className="max-w-md w-full mx-auto space-y-4" onSubmit={registerUser}>

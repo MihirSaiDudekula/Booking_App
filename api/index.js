@@ -131,6 +131,23 @@ app.get('/profile', (req, res) => {
   }
 });
 
+// Define a route to handle user logout
+app.post('/logout', (req, res) => {
+  try {
+    // Try to clear the 'token' cookie by setting its value to an empty string
+    res.cookie('token', '', { expires: new Date(0), httpOnly: true, sameSite: 'None', secure: true });
+
+    // Send a JSON response indicating a successful logout
+    res.json(true);
+  } catch (error) {
+    // If an error occurs during the logout process, handle it
+    console.error('Error clearing token cookie:', error);
+
+    // Send a 500 Internal Server Error response with an error message
+    res.status(500).json('Internal Server Error');
+  }
+});
+
 
 // Start the server and listen on the specified port
 app.listen(port, () => {
