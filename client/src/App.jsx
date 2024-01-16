@@ -5,6 +5,7 @@ import IndexPage from './components/IndexPage';
 import LoginPage from './components/LoginPage'; 
 import RegisterPage from './components/RegisterPage'; 
 import AccountPage from './components/AccountPage'; 
+import PlacesPage from './components/PlacesPage'; 
 import Layout from './Layout'; 
 import { UserContextProvider } from './UserContext'; // Import the UserContextProvider from 'UserContext'
 import './App.css'; 
@@ -32,8 +33,7 @@ function App() {
             <Route path="/account/" element={<AccountPage />} />
             <Route path="/account/:subpage" element={<AccountPage />} />
             {/*:subpage can be used for subrouting. it can be extracted by useParams() hook later*/}
-{/*            <Route path="/account/bookings" element={<AccountPage />} />
-            <Route path="/account/places" element={<AccountPage />} />*/}
+            <Route path="/account/:subpage/:action" element={<AccountPage />} />
           </Route>
         </Routes>
       </Router>
