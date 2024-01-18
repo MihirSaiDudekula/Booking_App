@@ -9,8 +9,13 @@ const jwt = require('jsonwebtoken');
 // Import the 'cookie-parser' middleware for handling cookies in Express
 // Use the 'cookie-parser' middleware to parse cookies in incoming requests
 const cookieParser = require('cookie-parser');
+const download = require('image-downloader');
+// download images from the internet, provided the link
 const User = require('./models/User.js'); // Import the User model from a file
 require('dotenv').config(); // Load environment variables from a .env file
+
+const path = require('path');
+//path module to use the path on system
 
 // Generate a salt for bcrypt hashing and get JWT secret from environment variables
 const bcryptSalt = bcrypt.genSaltSync(10);
@@ -22,7 +27,8 @@ app.use(
     origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'], // Allow requests from these specified origins
   })
 );
-
+app.options('*', cors()); // Enable CORS preflight for all routes
+app.use('/uploads',express.static(__dirname+'/uploads'))
 app.use(express.json()); // Use middleware to parse JSON bodies in requests
 app.use(cookieParser()); // Use cookie-parser middleware to parse cookies
 mongoose.connect(process.env.MONGO_URL); // Connect to MongoDB using the provided URL
@@ -148,7 +154,34 @@ app.post('/logout', (req, res) => {
   }
 });
 
+app.post('/upload-by-link', (req, res) => {
+  const { link } = req.body;
+  console.log(link)
+  const randomString = Math.random().toString(36).substring(7); // Generate a random string
+  const newName = `${Date.now()}_${randomString}.jpg`;
+  const destPath = path.join(__dirname, 'uploads', newName);
+  const options = {
+    url: link,
+      // Construct the destination path using path.join
+    dest: destPath,    
+  };
+  console.log(destPath)
+  console.log(Date.now())
+  const fetchImage = async () => {
+    try {
+      const { filename } = await download.image(options);      
+      console.log('Saved to', filename);
+      // In your server response
+      res.status(200).json({ message: 'Image downloaded successfully', filename: newName });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error downloading image' });
+      res.json(__dirname)
+    }
+  };
 
+  fetchImage();
+});
 // Start the server and listen on the specified port
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
