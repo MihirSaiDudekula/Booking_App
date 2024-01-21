@@ -28,92 +28,88 @@ export default function PlacesPage() {
   const [redirect, setRedirect] = useState(false);
   const { action } = useParams();
 
+  // Function to create and return an h2 element with specified text
   function inputHeader(text) {
     return <h2 className="text-2xl mt-4">{text}</h2>;
   }
 
+  // Function to create and return a paragraph element with specified text
   function inputDescription(text) {
     return <p className="text-gray-500 text-sm">{text}</p>;
   }
 
+  // Function to create a container with a header and description using inputHeader and inputDescription functions
   function preInput(header, description) {
     return (
       <>
+        {/* Render the header using inputHeader function */}
         {inputHeader(header)}
+        {/* Render the description using inputDescription function */}
         {inputDescription(description)}
       </>
     );
   }
 
+
+  // Define an asynchronous function named addPhotoByLink, which takes an event parameter (e)
   async function addPhotoByLink(e) {
+    // Prevent the default behavior of the event (e.g., form submission)
     e.preventDefault();
+
+    // Use try-catch block to handle asynchronous operations and potential errors
     try {
+      // Send a POST request to '/upload-by-link' endpoint using axios
       const { data: { message, filename } } = await axios.post('/upload-by-link', { link: photoLink });
+
+      // Update state with the newly added filename
       setAddedPhotos((prev) => [...prev, filename]);
+
+      // Clear the photoLink state variable
       setPhotoLink('');
-      // Handle success or show a message if needed
+
+      // Log the success message received from the server
       console.log(message);
     } catch (error) {
+      // Log an error message if there's an issue with the asynchronous operation
       console.error('Error uploading photo:', error);
+
       // Handle error (display an error message or take appropriate action)
     }
   }
 
-  // async function uploadPhoto(e) {
-  //   const files = e.target.files;
-  //   const data = new FormData();
 
-  //   for (let i = 0; i < files.length; i++) {
-  //     data.append('photos', files[i]);
-  //   }
-
-  //   const response = await axios.post('/upload', data, {
-  //     headers: { 'Content-type': 'multipart/form-data' },
-  //   });
-
-  //   const { data: filename } = response;
-  //   setAddedPhotos((prev) => [...prev, filename]);
-  //   setPhotoLink('');
-  // }
-//   async function uploadPhoto(e) {
-//   const files = e.target.files;
-//   const data = new FormData();
-
-//   for (let i = 0; i < files.length; i++) {
-//     data.append('photos', files[i]);
-//   }
-
-//   try {
-//     const { data: { message, filename } } = await axios.post('/upload', data, {
-//       headers: { 'Content-type': 'multipart/form-data' },
-//     });
-
-//     setAddedPhotos(prev => [...prev, filename]);
-//     console.log(message);
-//   } catch (error) {
-//     console.error('Error uploading photo:', error);
-//   }
-// }
+  // Define an asynchronous function named uploadPhoto, which takes an event parameter (e)
   async function uploadPhoto(e) {
+    // Extract the selected files from the event target
     const files = e.target.files;
+
+    // Create a new FormData object to handle multipart/form-data for file uploads
     const data = new FormData();
 
+    // Loop through each selected file and append it to the FormData object with key 'photos'
     for (let i = 0; i < files.length; i++) {
       data.append('photos', files[i]);
     }
 
+    // Use try-catch block to handle asynchronous operations and potential errors
     try {
+      // Send a POST request to '/upload' endpoint with the FormData containing the files
       const { data: { message, filenames } } = await axios.post('/upload', data, {
+        // Set the headers to indicate multipart/form-data
         headers: { 'Content-type': 'multipart/form-data' },
       });
 
-      // Assuming the server sends back an array of filenames
+      // Update state with the newly added filenames
       setAddedPhotos((prev) => [...prev, ...filenames]);
+
+      // Log the success message received from the server
       console.log(message);
     } catch (error) {
+      // Log an error message if there's an issue with the asynchronous operation
       console.error('Error uploading photo:', error);
     }
   }
+
 
   // we obtain the sub params of the URL
   return (

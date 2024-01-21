@@ -19,7 +19,8 @@ require('dotenv').config(); // Load environment variables from a .env file
 const path = require('path');
 //path module to use the path on system
 const fs = require('fs');
-//
+// files module to deal with file upload/download
+
 // Generate a salt for bcrypt hashing and get JWT secret from environment variables
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtsecret = process.env.JWT_SECRET;
@@ -157,57 +158,88 @@ app.post('/logout', (req, res) => {
   }
 });
 
+// Define a route handler for POST requests to '/upload-by-link'
 app.post('/upload-by-link', (req, res) => {
+  // Extract the 'link' property from the request body
   const { link } = req.body;
-  console.log(link)
-  const randomString = Math.random().toString(36).substring(7); // Generate a random string
+
+  // Log the received link for debugging purposes
+  console.log(link);
+
+  // Generate a random string to create a unique filename
+  const randomString = Math.random().toString(36).substring(7);
+
+  // Create a new filename using the current timestamp and the generated random string
   const newName = `${Date.now()}_${randomString}.jpg`;
+
+  // Construct the destination path using path.join and the 'uploads' directory
   const destPath = path.join(__dirname, 'uploads', newName);
+
+  // Configure options for downloading the image using the 'download' library
   const options = {
     url: link,
-      // Construct the destination path using path.join
-    dest: destPath,    
+    dest: destPath, // Set the destination path for saving the downloaded image
   };
-  // console.log(destPath)
-  // console.log(Date.now())
+
+  // Define an asynchronous function fetchImage to handle the image download process
   const fetchImage = async () => {
     try {
-      const { filename } = await download.image(options);      
+      // Use the 'download' library to download the image and get the saved filename
+      const { filename } = await download.image(options);
+
+      // Log a success message indicating the saved filename
       console.log('Saved to', filename);
-      // In your server response
+
+      // Send a successful response to the client with the saved filename
       res.status(200).json({ message: 'Image downloaded successfully', filename: newName });
     } catch (error) {
+      // Log an error if there's an issue with the image download
       console.error(error);
+
+      // Send an error response to the client
       res.status(500).json({ message: 'Error downloading image' });
-      res.json(__dirname)
     }
   };
 
+  // Call the fetchImage function to initiate the image download process
   fetchImage();
 });
 
 
+// Configure multer middleware to handle file uploads and specify the destination directory
 const photosMiddleware = multer({ dest: 'uploads/' });
 
+// Define a route handler for POST requests to '/upload' with the configured multer middleware
 app.post("/upload", photosMiddleware.array('photos', 100), (req, res) => {
   try {
+    // Map over the uploaded files to process and rename each file
     const filenames = req.files.map((file) => {
+      // Extract the file extension from the original filename
       const fileExtension = file.originalname.slice(file.originalname.lastIndexOf('.'));
+      
+      // Generate a new filename using the current timestamp, a random string, and the original file extension
       const newName = `${Date.now()}_${Math.random().toString(36).substring(7)}${fileExtension}`;
+
+      // Construct the destination path using path.join and the 'uploads' directory
       const destPath = path.join(__dirname, 'uploads', newName);
 
+      // Rename and move the uploaded file to the destination path
       fs.renameSync(file.path, destPath);
 
+      // Return the new filename for further processing or response
       return newName;
     });
 
+    // Send a JSON response indicating successful image uploads and the generated filenames
     res.json({ message: 'Images uploaded successfully', filenames });
   } catch (error) {
+    // Log an error if there's an issue with the file upload process
     console.error('Error uploading images:', error);
+
+    // Send an error response to the client
     res.status(500).json({ message: 'Internal Server Error - Unable to upload images' });
   }
 });
-
 
 // Start the server and listen on the specified port
 app.listen(port, () => {
