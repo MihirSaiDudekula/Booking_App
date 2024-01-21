@@ -11,12 +11,15 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const download = require('image-downloader');
 // download images from the internet, provided the link
+const multer = require('multer');
+//Multer is a middleware that is used for the easy handling of multipart/form data that is used when file uploading is done
 const User = require('./models/User.js'); // Import the User model from a file
 require('dotenv').config(); // Load environment variables from a .env file
 
 const path = require('path');
 //path module to use the path on system
-
+const fs = require('fs');
+//
 // Generate a salt for bcrypt hashing and get JWT secret from environment variables
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtsecret = process.env.JWT_SECRET;
@@ -165,8 +168,8 @@ app.post('/upload-by-link', (req, res) => {
       // Construct the destination path using path.join
     dest: destPath,    
   };
-  console.log(destPath)
-  console.log(Date.now())
+  // console.log(destPath)
+  // console.log(Date.now())
   const fetchImage = async () => {
     try {
       const { filename } = await download.image(options);      
@@ -182,6 +185,30 @@ app.post('/upload-by-link', (req, res) => {
 
   fetchImage();
 });
+
+
+const photosMiddleware = multer({ dest: 'uploads/' });
+
+app.post("/upload", photosMiddleware.array('photos', 100), (req, res) => {
+  try {
+    const filenames = req.files.map((file) => {
+      const fileExtension = file.originalname.slice(file.originalname.lastIndexOf('.'));
+      const newName = `${Date.now()}_${Math.random().toString(36).substring(7)}${fileExtension}`;
+      const destPath = path.join(__dirname, 'uploads', newName);
+
+      fs.renameSync(file.path, destPath);
+
+      return newName;
+    });
+
+    res.json({ message: 'Images uploaded successfully', filenames });
+  } catch (error) {
+    console.error('Error uploading images:', error);
+    res.status(500).json({ message: 'Internal Server Error - Unable to upload images' });
+  }
+});
+
+
 // Start the server and listen on the specified port
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
