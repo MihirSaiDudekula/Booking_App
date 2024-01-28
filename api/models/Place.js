@@ -1,16 +1,34 @@
+// Importing the mongoose library
 const mongoose = require('mongoose')
+
+// Creating a new mongoose schema for defining the structure of a place
 const placeSchema = new mongoose.Schema({
-	owner:{mongoose.Schema.Types.ObjectID,ref:'User'},
-	title: String,
-	address: String,
-	photos: [String],
-	description: String,
-	perks:[String],
-	extraInfo:String,
-	checkInTime:Number,
-	checkInTime:Number,
-	maxGuests:Number
+    // Defining owner field which is a reference to a User document
+    owner: { type: mongoose.Schema.Types.ObjectID, ref: 'User' },
+    // Defining title field as a String
+    title: String,
+    // Defining address field as a String
+    address: String,
+    // Defining photos field as an array of Strings
+    photos: [String],
+    // Defining description field as a String
+    description: String,
+    // Defining perks field as an array of Strings
+    perks: [String],
+    // Defining extraInfo field as a String
+    extraInfo: String,
+    // Defining checkInTime field as a Number
+    checkInTime: Number,
+    // Defining checkInTime field again (duplicate)
+    // This seems to be an error, as it duplicates the previous field definition
+    // It should likely be removed or corrected
+    checkInTime: Number,
+    // Defining maxGuests field as a Number
+    maxGuests: Number
 });
 
-const placeModel = mongoose.model('Place',placeSchema);
-module.exports=placeModel;
+// Creating a mongoose model based on the defined schema for the 'Place' collection
+const placeModel = mongoose.model('Place', placeSchema);
+
+// Exporting the created mongoose model to be used in other files
+module.exports = placeModel;

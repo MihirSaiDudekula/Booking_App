@@ -51,6 +51,3 @@ export function UserContextProvider({ children }) {
 export function useUser() {
   return useContext(UserContext);
 }
-// export function checkReady(){
-//   return 
-// }
