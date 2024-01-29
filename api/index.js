@@ -241,6 +241,37 @@ app.post("/upload", photosMiddleware.array('photos', 100), (req, res) => {
   }
 });
 
+// Define a route handler for POST requests to the '/places' endpoint
+app.post('/places', (req, res) => {
+  // Extract the 'token' property from the cookies of the incoming request
+  const { token } = req.cookies;
+
+  // Extract specific properties from the request body using destructuring
+  const {
+    title, address, addedPhotos, description,
+    perks, extraInfo, checkIn, checkOut, maxGuests,
+  } = req.body;
+
+  // Verify the token extracted from cookies using jwt.verify method
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    // Handle error if verification fails
+    if (err) throw err;
+
+    // Create a new Place document in the database using the Place model
+    const placeDoc = await Place.create({
+      // Set the owner field of the Place document to the user's id extracted from the token
+      owner: userData.id,
+
+      // Set other fields of the Place document to the corresponding values from the request body
+      title, address, photos: addedPhotos, description,
+      perks, extraInfo, checkIn, checkOut, maxGuests,
+    });
+
+    // Send the created Place document as a JSON response
+    res.json(placeDoc);
+  });
+});
+
 // Start the server and listen on the specified port
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
