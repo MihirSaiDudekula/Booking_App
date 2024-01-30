@@ -34,6 +34,8 @@ function App() {
             <Route path="/account/" element={<AccountPage />} />
             <Route path="/account/places" element={<PlacesPage />} />
             <Route path="/account/places/new" element={<PlacesFormPage />} />
+            <Route path="/account/places/:id" element={<PlacesFormPage />} />
+
             {/*:subpage can be used for subrouting. it can be extracted by useParams() hook later*/}
             <Route path="/account/:subpage/:action" element={<AccountPage />} />
           </Route>

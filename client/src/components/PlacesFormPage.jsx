@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 
 import axios from 'axios';
 // for handling requests
@@ -10,7 +11,7 @@ import AccountNav from './AccountNav'
 
 export default function PlacesFormPage()
 {
-  // const {id} = useParams();
+  const {id} = useParams();
   const [title, setTitle] = useState('');
   const [address, setAddress] = useState('');
   const [addedPhotos, setAddedPhotos] = useState([]);
@@ -22,6 +23,7 @@ export default function PlacesFormPage()
   const [maxGuests, setMaxGuests] = useState(1);
   const [price, setPrice] = useState(100);
   const [redirect,setRedirect] = useState(false);
+  
 
   // Function to create and return an h2 element with specified text
   function inputHeader(text) {
@@ -87,11 +89,11 @@ export default function PlacesFormPage()
           <div className="grid gap-2 sm:grid-cols-3">
             <div>
               <h3 className="mt-2 -mb-1">Check-In time</h3>
-              <input type="text" placeholder="16:00" value={checkIn} onChange={(ev) => setCheckInInfo(ev.target.value)} />
+              <input type="text" placeholder="16:00" value={checkIn} onChange={(ev) => setCheckIn(ev.target.value)} />
             </div>
             <div>
               <h3 className="mt-2 -mb-1">Check-Out time</h3>
-              <input type="text" placeholder="19:00" value={checkOut} onChange={(ev) => setCheckOutInfo(ev.target.value)} />
+              <input type="text" placeholder="19:00" value={checkOut} onChange={(ev) => setCheckOut(ev.target.value)} />
             </div>
             <div>
               <h3 className="mt-2 -mb-1">Max number of guests</h3>

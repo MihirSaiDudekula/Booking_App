@@ -14,6 +14,8 @@ const download = require('image-downloader');
 const multer = require('multer');
 //Multer is a middleware that is used for the easy handling of multipart/form data that is used when file uploading is done
 const User = require('./models/User.js'); // Import the User model from a file
+const Place = require('./models/Place.js');
+//similarly, import the Place model
 require('dotenv').config(); // Load environment variables from a .env file
 
 const path = require('path');
@@ -253,7 +255,7 @@ app.post('/places', (req, res) => {
   } = req.body;
 
   // Verify the token extracted from cookies using jwt.verify method
-  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+  jwt.verify(token, jwtsecret, {}, async (err, userData) => {
     // Handle error if verification fails
     if (err) throw err;
 
@@ -269,6 +271,34 @@ app.post('/places', (req, res) => {
 
     // Send the created Place document as a JSON response
     res.json(placeDoc);
+  });
+});
+
+app.get('/places', (req, res) => {
+  // Extract the 'token' property from the cookies of the incoming request
+  const { token } = req.cookies;
+
+  // Verify the token extracted from cookies using jwt.verify method
+
+  // token: This is the token to be verified. It's extracted from the request cookies in this context.
+
+  // jwtSecret: This is the secret key used to sign and verify the JWT. It's necessary to decode and verify the token.
+
+  // {}: This represents the options object passed to the verify method. It's an empty object ({}) in this case, meaning no additional options are provided.
+
+  // async (err, userData) => {: This is an asynchronous callback function provided to handle the result of the token verification. 
+
+  // userData (representing the decoded user data extracted from the token if verification is successful).
+  jwt.verify(token, jwtsecret, {}, async (err, userData) => {
+    // Handle error if verification fails
+    if (err) throw err;
+
+    // Destructure the 'id' property from the 'userData' object
+    const { id } = userData;
+
+    // Find places in the database where the 'owner' field matches the 'id' of the user
+    // and send the result as a JSON response
+    res.json(await Place.find({ owner: id }));
   });
 });
 
