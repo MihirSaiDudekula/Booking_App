@@ -18,11 +18,11 @@ const placeSchema = new mongoose.Schema({
     // Defining extraInfo field as a String
     extraInfo: String,
     // Defining checkInTime field as a Number
-    checkInTime: Number,
+    checkIn: String,
     // Defining checkInTime field again (duplicate)
     // This seems to be an error, as it duplicates the previous field definition
     // It should likely be removed or corrected
-    checkOutTime: Number,
+    checkOut: String,
     // Defining maxGuests field as a Number
     maxGuests: Number
 });

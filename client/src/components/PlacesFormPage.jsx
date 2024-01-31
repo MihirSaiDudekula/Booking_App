@@ -1,5 +1,5 @@
 import { useState,useEffect } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link,useParams, Navigate } from 'react-router-dom';
 
 import axios from 'axios';
 // for handling requests
@@ -7,7 +7,6 @@ import axios from 'axios';
 import PhotosUploader from './PhotosUploader';
 import Perks from './Perks';
 import AccountNav from './AccountNav'
-
 
 export default function PlacesFormPage()
 {
@@ -23,7 +22,29 @@ export default function PlacesFormPage()
   const [maxGuests, setMaxGuests] = useState(1);
   const [price, setPrice] = useState(100);
   const [redirect,setRedirect] = useState(false);
-  
+  useEffect(() => {
+      // Check if the 'id' variable is falsy (e.g., null, undefined, 0)
+      if (!id) {
+        // If 'id' is falsy, return early from the effect without performing any further actions
+        return;
+      }
+
+      // If 'id' is truthy, make an asynchronous GET request using Axios to fetch place data
+      axios.get('/places/'+id).then(response => {
+             const {data} = response;
+             console.log(data)
+             setTitle(data.title);
+             setAddress(data.address);
+             setAddedPhotos(data.photos);
+             setDescription(data.description);
+             setPerks(data.perks);
+             setExtraInfo(data.extraInfo);
+             setCheckIn(data.checkIn);
+             setCheckOut(data.checkOut);
+             setMaxGuests(data.maxGuests);
+          });
+    }, [id]); // Specify 'id' as a dependency for this effect
+
 
   // Function to create and return an h2 element with specified text
   function inputHeader(text) {
@@ -89,11 +110,11 @@ export default function PlacesFormPage()
           <div className="grid gap-2 sm:grid-cols-3">
             <div>
               <h3 className="mt-2 -mb-1">Check-In time</h3>
-              <input type="text" placeholder="16:00" value={checkIn} onChange={(ev) => setCheckIn(ev.target.value)} />
+              <input type="time" value={checkIn} onChange={(ev) => setCheckIn(ev.target.value)} />
             </div>
             <div>
               <h3 className="mt-2 -mb-1">Check-Out time</h3>
-              <input type="text" placeholder="19:00" value={checkOut} onChange={(ev) => setCheckOut(ev.target.value)} />
+              <input type="time" value={checkOut} onChange={(ev) => setCheckOut(ev.target.value)} />
             </div>
             <div>
               <h3 className="mt-2 -mb-1">Max number of guests</h3>

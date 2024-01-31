@@ -302,6 +302,16 @@ app.get('/places', (req, res) => {
   });
 });
 
+app.get('/places/:id', async (req, res) => {
+  // Extract the 'id' parameter from the request parameters
+  const { id } = req.params;
+
+  // Use the Mongoose model 'Place' to find a document by its ID
+  // and respond with the JSON representation of the found document
+  res.json(await Place.findById(id));
+});
+
+
 // Start the server and listen on the specified port
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
