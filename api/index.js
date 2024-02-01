@@ -311,6 +311,41 @@ app.get('/places/:id', async (req, res) => {
   res.json(await Place.findById(id));
 });
 
+app.put('/places', async (req, res) => {
+  // Extract the 'token' property from the cookies of the incoming request
+  const { token } = req.cookies;
+
+  // Destructure specific properties from the request body
+  const {
+    id, title, address, addedPhotos, description,
+    perks, extraInfo, checkIn, checkOut, maxGuests, price,
+  } = req.body;
+
+  // Verify the token extracted from cookies using jwt.verify method
+  jwt.verify(token, jwtsecret, {}, async (err, userData) => {
+    // Handle error if verification fails
+    if (err) throw err;
+
+    // Find the place document by 'id' in the database
+    const placeDoc = await Place.findById(id);
+
+    // Check if the authenticated user is the owner of the place
+    if (userData.id === placeDoc.owner.toString()) {
+      // Update the place document with new data
+      placeDoc.set({
+        title, address, photos: addedPhotos, description,
+        perks, extraInfo, checkIn, checkOut, maxGuests, price,
+      });
+
+      // Save the updated place document
+      await placeDoc.save();
+
+      // Send a JSON response indicating successful update
+      res.json('ok');
+    }
+  });
+});
+
 
 // Start the server and listen on the specified port
 app.listen(port, () => {

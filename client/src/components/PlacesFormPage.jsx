@@ -32,7 +32,6 @@ export default function PlacesFormPage()
       // If 'id' is truthy, make an asynchronous GET request using Axios to fetch place data
       axios.get('/places/'+id).then(response => {
              const {data} = response;
-             console.log(data)
              setTitle(data.title);
              setAddress(data.address);
              setAddedPhotos(data.photos);
@@ -69,17 +68,34 @@ export default function PlacesFormPage()
   }
 
   // function is responsible for handling the form submission.
-  async function addNewPlace(e){
-    e.preventDefault();
-    // prevents the default behavior of the form submission, which is to reload the page
-    const placeData = {title,address,addedPhotos,
-    description,perks,extraInfo,
-    checkIn,checkOut,maxGuests}
-    // creates an object named placeData containing data from various form fields 
-    await axios.post('/places',placeData)
-    // asynchronous POST request to the server endpoint /places with the placeData object as the payload. It's sending the new place details to be saved on the server/database.
-    setRedirect(true)
+  async function savePlace(ev) {
+    // Prevent the default form submission behavior
+    ev.preventDefault();
+
+    // Create an object 'placeData' containing place details from the form
+    const placeData = {
+      title, address, addedPhotos,
+      description, perks, extraInfo,
+      checkIn, checkOut, maxGuests, price,
+    };
+
+    if (id) {
+      // If 'id' exists, it indicates an existing place being updated
+      // Send a PUT request to '/places' endpoint to update the place with 'id'
+      await axios.put('/places', { id, ...placeData });
+      
+      // Set 'redirect' state to true after successful update
+      setRedirect(true);
+    } else {
+      // If 'id' doesn't exist, it indicates a new place being created
+      // Send a POST request to '/places' endpoint to create a new place
+      await axios.post('/places', placeData);
+      
+      // Set 'redirect' state to true after successful creation
+      setRedirect(true);
+    }
   }
+
 
   if (redirect) {
     return <Navigate to={'/account/places'} />
@@ -89,7 +105,7 @@ export default function PlacesFormPage()
       <>
       <AccountNav/>
       <div>
-        <form onSubmit={addNewPlace}>
+        <form onSubmit={savePlace}>
           {//when the form is submitted, the addNewPlace function will be called to handle the submission
           }
           {preInput('Title', 'Title for your place. Should be short and catchy')}
@@ -110,11 +126,11 @@ export default function PlacesFormPage()
           <div className="grid gap-2 sm:grid-cols-3">
             <div>
               <h3 className="mt-2 -mb-1">Check-In time</h3>
-              <input type="time" value={checkIn} onChange={(ev) => setCheckIn(ev.target.value)} />
+              <input type="text" value={checkIn} onChange={(ev) => setCheckIn(ev.target.value)} />
             </div>
             <div>
               <h3 className="mt-2 -mb-1">Check-Out time</h3>
-              <input type="time" value={checkOut} onChange={(ev) => setCheckOut(ev.target.value)} />
+              <input type="text" value={checkOut} onChange={(ev) => setCheckOut(ev.target.value)} />
             </div>
             <div>
               <h3 className="mt-2 -mb-1">Max number of guests</h3>
