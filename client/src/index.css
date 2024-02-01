@@ -7,6 +7,9 @@ input[type='text'],input[type='email'],input[type='password'],input[type='number
   @apply w-full border my-1 py-2 px-3 rounded-2xl;
 }
 
+textarea{
+  height: 140px;
+}
 button{
   background-color: #F5385D;
 /*  @apply bg-primary*/
