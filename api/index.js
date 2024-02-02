@@ -251,7 +251,7 @@ app.post('/places', (req, res) => {
   // Extract specific properties from the request body using destructuring
   const {
     title, address, addedPhotos, description,
-    perks, extraInfo, checkIn, checkOut, maxGuests,
+    perks, extraInfo, checkIn, checkOut, maxGuests,price,
   } = req.body;
 
   // Verify the token extracted from cookies using jwt.verify method
@@ -266,7 +266,7 @@ app.post('/places', (req, res) => {
 
       // Set other fields of the Place document to the corresponding values from the request body
       title, address, photos: addedPhotos, description,
-      perks, extraInfo, checkIn, checkOut, maxGuests,
+      perks, extraInfo, checkIn, checkOut, maxGuests,price,
     });
 
     // Send the created Place document as a JSON response
@@ -345,6 +345,11 @@ app.put('/places', async (req, res) => {
     }
   });
 });
+
+//but now, instead of displaying the places that the particular user is the owner of, we want to display all the places that are available, for the consumer
+app.get('/places', async (req,res) => {
+  res.json( await Place.find() );
+}); 
 
 
 // Start the server and listen on the specified port

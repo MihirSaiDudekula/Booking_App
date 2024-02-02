@@ -24,7 +24,8 @@ const placeSchema = new mongoose.Schema({
     // It should likely be removed or corrected
     checkOut: String,
     // Defining maxGuests field as a Number
-    maxGuests: Number
+    maxGuests: Number,
+    price:Number
 });
 
 // Creating a mongoose model based on the defined schema for the 'Place' collection
