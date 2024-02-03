@@ -10,6 +10,7 @@ input[type='text'],input[type='email'],input[type='password'],input[type='number
 textarea{
   height: 140px;
 }
+
 button{
   background-color: #F5385D;
 /*  @apply bg-primary*/
