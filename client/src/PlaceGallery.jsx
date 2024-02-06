@@ -41,7 +41,7 @@ export default function PlaceGallery({ place }) {
         {/* Display the first photo in a larger size */}
         <div>
           {place.photos?.[0] && (
-            <div>
+            <div className="shrink-0">
               {/* Clicking on the first photo sets 'showAllPhotos' state to true */}
               <Image onClick={() => setShowAllPhotos(true)} className="aspect-square cursor-pointer object-cover" src={place.photos[0]} alt="" />
             </div>

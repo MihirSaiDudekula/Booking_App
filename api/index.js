@@ -16,6 +16,7 @@ const multer = require('multer');
 const User = require('./models/User.js'); // Import the User model from a file
 const Place = require('./models/Place.js');
 //similarly, import the Place model
+const Booking = require('./models/Booking.js');
 require('dotenv').config(); // Load environment variables from a .env file
 
 const path = require('path');
@@ -351,6 +352,50 @@ app.get('/places', async (req,res) => {
   res.json( await Place.find() );
 }); 
 
+function getUserDataFromReq(req) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(req.cookies.token, jwtsecret, {}, async (err, userData) => {
+      if (err) throw err;
+      resolve(userData);
+    });
+  });
+}
+
+app.post('/bookings', async (req, res) => {
+  // Retrieve user data from the request using a custom function 'getUserDataFromReq'
+  const userData = await getUserDataFromReq(req);
+
+  // Destructure specific properties from the request body
+  const {
+    place, checkIn, checkOut, numberOfGuests, name, phone, price,
+  } = req.body;
+
+  // Create a new booking document using the Booking model and provided data
+  Booking.create({
+    place, checkIn, checkOut, numberOfGuests, name, phone, price,
+    user: userData.id, // Assign the booking to the authenticated user
+  })
+    .then((doc) => {
+      // Send the newly created booking document as a JSON response
+      res.json(doc);
+    })
+    .catch((err) => {
+      // Handle errors by throwing them
+      throw err;
+    });
+});
+
+app.get('/bookings', async (req, res) => {
+  // Retrieve user data from the request using a custom function 'getUserDataFromReq'
+  const userData = await getUserDataFromReq(req);
+
+  // Retrieve bookings associated with the authenticated user by finding documents in the Booking collection
+  // Populating the 'place' field to include details about the booked place
+  const bookings = await Booking.find({ user: userData.id }).populate('place');
+
+  // Send the retrieved bookings as a JSON response
+  res.json(bookings);
+});
 
 // Start the server and listen on the specified port
 app.listen(port, () => {
