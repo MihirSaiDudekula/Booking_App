@@ -1,6 +1,6 @@
 # Airbnb Clone - MERN Booking App
 
-![Airbnb Clone]([link_to_project_banner_image](https://www.youtube.com/watch?v=MpQbwtSiZ7E&ab_channel=CodingWithDawid))
+![Airbnb Clone](https://www.youtube.com/watch?v=MpQbwtSiZ7E&ab_channel=CodingWithDawid))
 
 This beginner-friendly tutorial guides you through building a full-stack booking app using the MERN stack (MongoDB, Express, React, Node). The app serves as an Airbnb clone with key functionalities.
 
