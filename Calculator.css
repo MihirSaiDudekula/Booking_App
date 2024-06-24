@@ -1,0 +1,145 @@
+/* General styles for the calculator */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0; /* Set a background color for the page */
+    margin: 0; /* Remove default margin */
+    font-family: Arial, sans-serif; /* Optional: Set a font family */
+}
+
+#calculator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 20rem; /* Adjust width as needed */
+}
+
+/* Styling for the output/display area */
+#output {
+    margin-bottom: 1rem;
+}
+
+#display {
+    /* width: calc(100%);  */
+    /* Adjust width of display */
+    padding: 10px;
+    font-size: 24px;
+    background-color: #333; /* Example background color */
+    color: white; /* Example text color */
+    border: 5px solid #f0f0f0;
+    border-radius: 5px;
+    text-align: right;
+    box-sizing: border-box;
+}
+
+/* Styling for the button rows */
+.row {
+    display: flex;
+    width: 100%; /* Each row should occupy full width */
+    /* justify-content: space-around;  */
+    /* Adjust spacing between buttons */
+    margin-bottom: 10px; /* Adjust margin between rows */
+}
+
+/* Styling for the buttons */
+button {
+    width: 50px; /* Adjust button width */
+    height: 50px; /* Adjust button height */
+    font-size: 20px;
+    background-color: #f0f0f0;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    margin: 15px;
+}
+
+button:hover {
+    background-color: rgb(139, 139, 139); /* Change color on hover */
+}
+
+button:active {
+    transform: scale(0.95); /* Button press effect */
+}
+
+/* Calculator.css */
+
+/* General styles for the calculator */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #1a1a1a; /* Dark background color */
+    margin: 0; /* Remove default margin */
+    font-family: Arial, sans-serif; /* Optional: Set a font family */
+    color: #f0f0f0; /* Light text color */
+}
+
+#calculator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #2b2b2b; /* Slightly lighter background color */
+    padding: 2rem;
+    border-radius: 10px;
+    width: 20rem; /* Adjust width as needed */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+/* Styling for the output/display area */
+#output {
+    margin-bottom: 1rem;
+}
+
+#display {
+    width: calc(100% - 20px); /* Adjust width of display */
+    padding: 10px;
+    font-size: 24px;
+    background-color: #333; /* Darker display background */
+    color: #f0f0f0; /* Light text color */
+    border: none;
+    border-radius: 5px;
+    text-align: right;
+    box-sizing: border-box;
+    border: 2px solid #444; /* Darker border */
+}
+
+/* Styling for the button rows */
+.row {
+    display: flex;
+    width: 100%; /* Each row should occupy full width */
+    justify-content: space-around; /* Evenly distribute buttons */
+    margin-bottom: 10px; /* Adjust margin between rows */
+}
+
+/* Styling for the buttons */
+button {
+    width: 50px; /* Adjust button width */
+    height: 50px; /* Adjust button height */
+    font-size: 20px;
+    background-color: #444; /* Dark button background */
+    color: #f0f0f0; /* Light text color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    margin: 10px; /* Adjust margin */
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+button:hover {
+    background-color: #666; /* Darker hover color */
+}
+
+button:active {
+    transform: scale(0.95); /* Button press effect */
+}
