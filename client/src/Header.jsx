@@ -11,6 +11,7 @@ export default function Header() {
 
   // Render the header section of the application
   return (
+    <>
     <header className="flex justify-between items-center p-4 border-b border-gray-300">
       {/* Link to the home page with AirBnB logo and title */}
       <Link to="/" className="flex items-center gap-1">
@@ -64,5 +65,6 @@ export default function Header() {
         )}
       </div>
     </header>
+    </>
   );
 }
